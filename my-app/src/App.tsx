@@ -27,7 +27,9 @@ const App = (props: AppPagePropsType) => {
                         <Route path={'/profile/*'} element={<Profile profilePage={props.store._state.profilePage}
                                                                      dispatch={props.store.dispatch.bind(props.store)}
                                                                      newPostText={props.store._state.profilePage.newPostText}/>}/>
-                        <Route path={'/dialogs/*'} element={<Dialogs dialogsPage={props.store._state.dialogsPage}/>}/>
+                        <Route path={'/dialogs/*'} element={<Dialogs dialogsPage={props.store._state.dialogsPage}
+                                                                     dispatch={props.store.dispatch.bind(props.store)}
+                                                                     newMessText={props.store._state.dialogsPage.newMessText}/>}/>
                         <Route path={'/news/*'} element={<News/>}/>
                         <Route path={'/music/*'} element={<Music/>}/>
                         <Route path={'/settings/*'} element={<Settings/>}/>

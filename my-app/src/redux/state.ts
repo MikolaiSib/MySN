@@ -1,5 +1,8 @@
 const ADD_POST = 'ADD-POST';
 const UPDATE_NEW_POST_TEXT = "UPDATE-NEW-POST-TEXT";
+const ADD_MESS = 'ADD-MESS';
+const UPDATE_NEW_MESS_TEXT = "UPDATE-NEW-MESS-TEXT";
+
 
 let rerenderET = (state: any) => {
     console.log('state')
@@ -24,6 +27,7 @@ export type PostType = {
 export type DialogsPageType = {
     dialogs: DialogType[]
     messages: Array<MessageType>
+    newMessText: string
 }
 
 export type ProfilePageType = {
@@ -34,7 +38,7 @@ export type ProfilePageType = {
 export type RootStateType = {
     profilePage: ProfilePageType
     dialogsPage: DialogsPageType
-    sitebar: any
+    sidebar: any
 }
 
 export type StoreType = {
@@ -58,7 +62,8 @@ export type StoreType = {
 //     newText: any
 // }
 
-export type ActionsTypes = ReturnType<typeof addPostAC> | ReturnType<typeof updateNewPostTextAC>
+export type ActionsTypes = ReturnType<typeof addPostAC> |
+    ReturnType<typeof updateNewPostTextAC> | ReturnType<typeof addMessAC> | ReturnType<typeof updateNewMessTextAC>
 // export type ActionsTypes = AddPostActionType | UpdateNewPostTextActionType
 
 export const store: StoreType = {
@@ -72,6 +77,7 @@ export const store: StoreType = {
             ],
         },
         dialogsPage: {
+            newMessText: "",
             messages: [
                 {id: 1, mess: "Hi"},
                 {id: 2, mess: "Hello"},
@@ -87,7 +93,7 @@ export const store: StoreType = {
                 {id: 5, name: "Free"},
             ],
         },
-        sitebar: {}
+        sidebar: {}
     },
     _onChange() {
         console.log('state')
@@ -108,8 +114,19 @@ export const store: StoreType = {
             this._state.profilePage.posts.push(newPost)
             this._state.profilePage.newPostText = ''
             this._onChange()
-        } else if (action.type === UPDATE_NEW_POST_TEXT) {
+        } if (action.type === UPDATE_NEW_POST_TEXT) {
             this._state.profilePage.newPostText = action.newText
+            this._onChange()
+        } if (action.type === ADD_MESS) {
+            let newMess: MessageType = {
+                id: new Date().getTime(),
+                mess: this._state.dialogsPage.newMessText
+            }
+            this._state.dialogsPage.messages.push(newMess)
+            this._state.dialogsPage.newMessText = ''
+            this._onChange()
+        } if (action.type === UPDATE_NEW_MESS_TEXT) {
+            this._state.dialogsPage.newMessText = action.newMess
             this._onChange()
         }
     }
@@ -125,6 +142,19 @@ export const updateNewPostTextAC = (newText: string) => {
     return {
         type: UPDATE_NEW_POST_TEXT,
         newText: newText
+    } as const
+}
+
+export const addMessAC = () => {
+    return {
+        type: ADD_MESS
+    } as const
+}
+
+export const updateNewMessTextAC = (newMess: string) => {
+    return {
+        type: UPDATE_NEW_MESS_TEXT,
+        newMess: newMess
     } as const
 }
 
