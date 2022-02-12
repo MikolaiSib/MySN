@@ -2,16 +2,11 @@ import React, {ChangeEvent} from 'react';
 import s from './Dialogs.module.css';
 import {DialogItem} from "./DialogItem/DialogItem";
 import {Message} from "./Message/Message";
-import {
-    ActionsTypes,
-    addMessAC,
-    DialogsPageType,
-    updateNewMessTextAC,
-} from "../../redux/state";
+import {ActionsTypes, DialogsPageType} from "../../redux/store";
+import {addMessAC, updateNewMessTextAC} from "../../redux/dialogs-reducer";
 
 type DialogsPagePropsType = {
     dialogsPage: DialogsPageType
-    newMessText: string
     dispatch: (action: ActionsTypes) => void
 }
 
@@ -37,10 +32,10 @@ export const Dialogs = (props: DialogsPagePropsType) => {
                     <Message mess={m.mess} id={m.id}/>)}
             </div>
             <div>
-                        <textarea
-                            onChange={onMessChange}
-                            value={props.newMessText}
-                        />
+                <textarea
+                    onChange={onMessChange}
+                    value={props.dialogsPage.newMessText}
+                />
             </div>
             <div>
                 <button onClick={addMess}

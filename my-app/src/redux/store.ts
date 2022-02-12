@@ -1,12 +1,10 @@
-const ADD_POST = 'ADD-POST';
-const UPDATE_NEW_POST_TEXT = "UPDATE-NEW-POST-TEXT";
-const ADD_MESS = 'ADD-MESS';
-const UPDATE_NEW_MESS_TEXT = "UPDATE-NEW-MESS-TEXT";
+import {ProfileActionsTypes, profileReducer} from "./profile-reducer";
+import {DialogsActionsTypes, dialogsReducer} from "./dialogs-reducer";
+import {sidebarReducer} from "./sidebar-reducer";
 
-
-let rerenderET = (state: any) => {
-    console.log('state')
-}
+// let rerenderET = (state: any) => {
+//     console.log('state')
+// }
 
 export type MessageType = {
     id: number
@@ -62,8 +60,7 @@ export type StoreType = {
 //     newText: any
 // }
 
-export type ActionsTypes = ReturnType<typeof addPostAC> |
-    ReturnType<typeof updateNewPostTextAC> | ReturnType<typeof addMessAC> | ReturnType<typeof updateNewMessTextAC>
+export type ActionsTypes = ProfileActionsTypes | DialogsActionsTypes
 // export type ActionsTypes = AddPostActionType | UpdateNewPostTextActionType
 
 export const store: StoreType = {
@@ -104,59 +101,19 @@ export const store: StoreType = {
     getState() {
         return this._state
     },
-    dispatch(action: any) {
-        if (action.type === ADD_POST) {
-            let newPost: PostType = {
-                id: new Date().getTime(),
-                post: this._state.profilePage.newPostText,
-                likeCount: 999
-            }
-            this._state.profilePage.posts.push(newPost)
-            this._state.profilePage.newPostText = ''
-            this._onChange()
-        } if (action.type === UPDATE_NEW_POST_TEXT) {
-            this._state.profilePage.newPostText = action.newText
-            this._onChange()
-        } if (action.type === ADD_MESS) {
-            let newMess: MessageType = {
-                id: new Date().getTime(),
-                mess: this._state.dialogsPage.newMessText
-            }
-            this._state.dialogsPage.messages.push(newMess)
-            this._state.dialogsPage.newMessText = ''
-            this._onChange()
-        } if (action.type === UPDATE_NEW_MESS_TEXT) {
-            this._state.dialogsPage.newMessText = action.newMess
-            this._onChange()
-        }
+    dispatch(action: ActionsTypes) {
+
+        this._state.profilePage = profileReducer(this._state.profilePage, action)
+        this._state.dialogsPage = dialogsReducer(this._state.dialogsPage, action)
+        this._state.sidebar = sidebarReducer(this._state.sidebar, action)
+
+        this._onChange()
     }
 }
 
-export const addPostAC = () => {
-    return {
-        type: ADD_POST
-    } as const
-}
 
-export const updateNewPostTextAC = (newText: string) => {
-    return {
-        type: UPDATE_NEW_POST_TEXT,
-        newText: newText
-    } as const
-}
 
-export const addMessAC = () => {
-    return {
-        type: ADD_MESS
-    } as const
-}
 
-export const updateNewMessTextAC = (newMess: string) => {
-    return {
-        type: UPDATE_NEW_MESS_TEXT,
-        newMess: newMess
-    } as const
-}
 
 
 //

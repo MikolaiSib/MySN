@@ -3,27 +3,29 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import {store, StoreType} from "./redux/state";
+import store from "./redux/redux-store";
 
 
 
 
-export let rerenderET = (props: StoreType) => {
+let rerenderET = (state: any) => {
     ReactDOM.render(
         <React.StrictMode>
-            <App store={store}/>
+            <App store={store} state = {state} dispatch={store.dispatch.bind(store)}/>
         </React.StrictMode>,
         document.getElementById('root')
     );
 }
 
-rerenderET(store)
+rerenderET(store.getState())
 
-store.subscribe(rerenderET)
+store.subscribe(()=>{
+    let state = store.getState()
+    rerenderET(state)})
 
 // ReactDOM.render(
 //   <React.StrictMode>
-//     <App state={state} addPost={addPost}/>
+//     <App store={store}/>
 //   </React.StrictMode>,
 //   document.getElementById('root')
 // );
