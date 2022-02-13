@@ -4,14 +4,16 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import store from "./redux/redux-store";
-
-
+import StoreContext from './StoreContext';
 
 
 let rerenderET = (state: any) => {
     ReactDOM.render(
         <React.StrictMode>
-            <App store={store} state = {state} dispatch={store.dispatch.bind(store)}/>
+            <StoreContext.Provider value={store}>
+                <App/>
+                {/*<App store={store}/>*/}
+            </StoreContext.Provider>
         </React.StrictMode>,
         document.getElementById('root')
     );
@@ -19,9 +21,10 @@ let rerenderET = (state: any) => {
 
 rerenderET(store.getState())
 
-store.subscribe(()=>{
+store.subscribe(() => {
     let state = store.getState()
-    rerenderET(state)})
+    rerenderET(state)
+})
 
 // ReactDOM.render(
 //   <React.StrictMode>

@@ -1,24 +1,26 @@
-import React, {ChangeEvent} from 'react';
+import React from 'react';
 import s from './MyPosts.module.css';
 import Post from "./Post/Post";
-import {ActionsTypes, PostType, ProfilePageType} from "../../../redux/store";
-import {addPostAC, updateNewPostTextAC} from "../../../redux/profile-reducer";
 
 export type MyProfilePageType = {
-    profilePage: ProfilePageType
-    dispatch: (action: ActionsTypes) => void
+    updateNewPostText: (text: any) => void
+    addPost: () => void
+    posts: any[]
+    newPostText: string
 }
 
 const MyPosts = (props: MyProfilePageType) => {
 
-    // let newPostElement = React.createRef<HTMLTextAreaElement>();
+    let newPostElement = React.createRef<HTMLTextAreaElement>();
 
-    let addPost = () => {
-        props.dispatch(addPostAC())
+    let onAddPost = () => {
+        props.addPost()
     }
 
-    let onPostChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
-        props.dispatch(updateNewPostTextAC(e.currentTarget.value))}
+    let onPostChange = () => {
+        let text = newPostElement.current?.value
+        props.updateNewPostText(text)
+    }
 
     return (
         <div className={s.content}>
@@ -29,16 +31,16 @@ const MyPosts = (props: MyProfilePageType) => {
                 <div>
                     <div>
                         <textarea onChange={onPostChange}
-                            // ref={newPostElement}
-                                  value={props.profilePage.newPostText}/>
+                                  ref={newPostElement}
+                                  value={props.newPostText}/>
                     </div>
                     <div>
-                        <button onClick={addPost}>add post</button>
+                        <button onClick={onAddPost}>add post</button>
                     </div>
                 </div>
                 <div className={s.posts}>
                     <div>
-                        {props.profilePage.posts.map(p =>
+                        {props.posts.map(p =>
                             <Post post={p.post} likeCount={p.likeCount} id={p.id}/>
                         )}
                     </div>
