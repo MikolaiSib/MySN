@@ -2,16 +2,9 @@ import React from 'react';
 import s from './Dialogs.module.css';
 import {DialogItem} from "./DialogItem/DialogItem";
 import {Message} from "./Message/Message";
+import {DialogsPropsType} from "./DialogsContainer";
 
-type DialogsPagePropsType = {
-    onMessChange: (mess: any) => void
-    addMess: () => void
-    messages: any[]
-    newMessText: string
-    dialogs: any[]
-}
-
-export const Dialogs = (props: DialogsPagePropsType) => {
+export const Dialogs = (props: DialogsPropsType) => {
 
     let newMessElement = React.createRef<HTMLTextAreaElement>();
 
@@ -28,13 +21,13 @@ export const Dialogs = (props: DialogsPagePropsType) => {
         <div className={s.dialogs}>
             <div className={s.dialogsItems}>
                 {props.dialogs.map(n =>
-                    <DialogItem name={n.name} id={n.id.toString()}/>
+                    <DialogItem key={n.id} name={n.name} id={n.id.toString()}/>
                 )}
             </div>
 
             <div className={s.messages}>
                 {props.messages.map(m =>
-                    <Message mess={m.mess} id={m.id}/>)}
+                    <Message key={m.id} mess={m.mess} id={m.id}/>)}
             </div>
 
             <div>

@@ -4,34 +4,35 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import store from "./redux/redux-store";
-import StoreContext from './StoreContext';
+import {Provider} from "react-redux";
 
 
-let rerenderET = (state: any) => {
-    ReactDOM.render(
-        <React.StrictMode>
-            <StoreContext.Provider value={store}>
-                <App/>
-                {/*<App store={store}/>*/}
-            </StoreContext.Provider>
-        </React.StrictMode>,
-        document.getElementById('root')
-    );
-}
+// let rerenderET = (state: any) => {
+//     ReactDOM.render(
+//         <React.StrictMode>
+//             <Provider store={store}>
+//                 <App/>
+//                 {/*<App store={store}/>*/}
+//             </Provider>
+//         </React.StrictMode>,
+//         document.getElementById('root')
+//     );
+// }
+//
+// rerenderET(store.getState())
+//
+// store.subscribe(() => {
+//     let state = store.getState()
+//     rerenderET(state)
+// })
 
-rerenderET(store.getState())
-
-store.subscribe(() => {
-    let state = store.getState()
-    rerenderET(state)
-})
-
-// ReactDOM.render(
-//   <React.StrictMode>
-//     <App store={store}/>
-//   </React.StrictMode>,
-//   document.getElementById('root')
-// );
+ReactDOM.render(
+    <React.StrictMode>
+        <Provider store={store}>
+            <App/>
+        </Provider> </React.StrictMode>,
+    document.getElementById('root')
+);
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))

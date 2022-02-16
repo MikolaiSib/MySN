@@ -6,32 +6,34 @@ import {sidebarReducer} from "./sidebar-reducer";
 //     console.log('state')
 // }
 
-export type MessageType = {
+type MessageType = {
     id: number
     mess: string
 }
 
-export type DialogType = {
+type DialogType = {
     id: number | string
     name: string
 }
 
-export type PostType = {
+type PostType = {
     id: number
     post: string
     likeCount: number
 }
 
-export type DialogsPageType = {
+type ProfilePageType = {
+    newPostText: string
+    posts: Array<PostType>
+}
+
+type DialogsPageType = {
     dialogs: DialogType[]
     messages: Array<MessageType>
     newMessText: string
 }
 
-export type ProfilePageType = {
-    newPostText: string
-    posts: Array<PostType>
-}
+
 
 export type RootStateType = {
     profilePage: ProfilePageType

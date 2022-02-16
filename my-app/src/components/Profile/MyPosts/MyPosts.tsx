@@ -1,15 +1,10 @@
 import React from 'react';
 import s from './MyPosts.module.css';
 import Post from "./Post/Post";
+import {MyPostsPropsType} from "./MyPostsContainer";
 
-export type MyProfilePageType = {
-    updateNewPostText: (text: any) => void
-    addPost: () => void
-    posts: any[]
-    newPostText: string
-}
 
-const MyPosts = (props: MyProfilePageType) => {
+const MyPosts = (props: MyPostsPropsType) => {
 
     let newPostElement = React.createRef<HTMLTextAreaElement>();
 
@@ -41,7 +36,7 @@ const MyPosts = (props: MyProfilePageType) => {
                 <div className={s.posts}>
                     <div>
                         {props.posts.map(p =>
-                            <Post post={p.post} likeCount={p.likeCount} id={p.id}/>
+                            <Post key={p.id} post={p.post} likeCount={p.likeCount} id={p.id}/>
                         )}
                     </div>
                 </div>
