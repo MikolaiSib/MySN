@@ -47,14 +47,16 @@ export const dialogsReducer = (state: DialogsPageType = initialState, action: Ac
                 id: new Date().getTime(),
                 mess: state.newMessText
             }
-            state.messages.push(newMess)
-            state.newMessText = ''
-            break;
+            return {
+                ...state,
+                messages: [...state.messages, newMess],
+                newMessText: ''
+            }
         case UPDATE_NEW_MESS_TEXT:
-            state.newMessText = action.newMess
-            break;
+            return {...state, newMessText: action.newMess}
+        default:
+            return state
     }
-    return state
 }
 
 export const addMessAC = () => {

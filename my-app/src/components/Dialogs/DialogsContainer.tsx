@@ -12,25 +12,25 @@ import {Dispatch} from "redux";
 //
 // export const DialogsContainer1 = () => {
 
-    // let state = props.store.getState()
-    //
-    // let addMess = () => {
-    //     props.store.dispatch(addMessAC())
-    // }
-    //
-    // let onMessChange = (mess: any) => {
-    //     props.store.dispatch(updateNewMessTextAC(mess))
-    // }
+// let state = props.store.getState()
+//
+// let addMess = () => {
+//     props.store.dispatch(addMessAC())
+// }
+//
+// let onMessChange = (mess: any) => {
+//     props.store.dispatch(updateNewMessTextAC(mess))
+// }
 
-    // return (
-    //     <Dialogs
-    //         addMess={addMess}
-    //         onMessChange={onMessChange}
-    //         messages={state.dialogsPage.messages}
-    //         newMessText={state.dialogsPage.newMessText}
-    //         dialogs={state.dialogsPage.dialogs}
-    //     />
-    // );
+// return (
+//     <Dialogs
+//         addMess={addMess}
+//         onMessChange={onMessChange}
+//         messages={state.dialogsPage.messages}
+//         newMessText={state.dialogsPage.newMessText}
+//         dialogs={state.dialogsPage.dialogs}
+//     />
+// );
 //
 //     return (
 //         <>
@@ -63,13 +63,13 @@ type mapStatePropsType = {
 }
 
 type mapDispatchPropsType = {
-    addMess: ()=>void
-    onMessChange: (mess: any)=>void
+    addMess: () => void
+    onMessChange: (mess: any) => void
 }
 
 export type DialogsPropsType = mapStatePropsType & mapDispatchPropsType
 
-const mapStateToProps = (state: AppStateType): mapStatePropsType  => {
+const mapStateToProps = (state: AppStateType): mapStatePropsType => {
     return {
         messages: state.dialogsPage.messages,
         newMessText: state.dialogsPage.newMessText,
@@ -79,8 +79,12 @@ const mapStateToProps = (state: AppStateType): mapStatePropsType  => {
 
 const mapDispatchToProps = (dispatch: Dispatch): mapDispatchPropsType => {
     return {
-        addMess: () => {dispatch(addMessAC())},
-        onMessChange: (mess: any) => {dispatch(updateNewMessTextAC(mess))}
+        addMess: () => {
+            dispatch(addMessAC())
+        },
+        onMessChange: (mess: any) => {
+            dispatch(updateNewMessTextAC(mess))
+        }
     }
 }
 

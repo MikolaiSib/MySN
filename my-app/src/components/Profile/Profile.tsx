@@ -12,13 +12,7 @@ export const Profile = () => {
     return (
         <div>
             <ProfileInfo/>
-            <MyPostsContainer
-                // store={props.store}
-                // profilePage={props.profilePage}
-                     // addPost={props.addPost}
-                     // updatePost={props.updatePost}
-                     // dispatch={props.dispatch}
-            />
+            <MyPostsContainer/>
         </div>
     );
 }

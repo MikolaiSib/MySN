@@ -43,8 +43,8 @@ type mapStatePropsType = {
 }
 
 type mapDispatchPropsType = {
-    addPost: ()=>void
-    updateNewPostText: (text: any)=>void
+    addPost: () => void
+    updateNewPostText: (text: any) => void
 }
 
 export type MyPostsPropsType = mapStatePropsType & mapDispatchPropsType
@@ -56,10 +56,14 @@ const mapStateToProps = (state: AppStateType): mapStatePropsType => {
     }
 }
 
-const mapDispatchToProps = (dispatch: any): mapDispatchPropsType  => {
+const mapDispatchToProps = (dispatch: any): mapDispatchPropsType => {
     return {
-        addPost: () => {dispatch(addPostAC())},
-        updateNewPostText: (text: any) => {dispatch(updateNewPostTextAC(text))}
+        addPost: () => {
+            dispatch(addPostAC())
+        },
+        updateNewPostText: (text: any) => {
+            dispatch(updateNewPostTextAC(text))
+        }
     }
 }
 

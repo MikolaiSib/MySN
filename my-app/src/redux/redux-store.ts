@@ -16,7 +16,5 @@ let store = createStore(rootReducer)
 export default store
 
 
-
-
 //@ts-ignore
 window.store = store
