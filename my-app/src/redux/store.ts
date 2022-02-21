@@ -1,6 +1,7 @@
 import {ProfileActionsTypes, profileReducer} from "./profile-reducer";
 import {DialogsActionsTypes, dialogsReducer} from "./dialogs-reducer";
 import {sidebarReducer} from "./sidebar-reducer";
+import {UsersActionsTypes} from "./users-reducer";
 
 // let rerenderET = (state: any) => {
 //     console.log('state')
@@ -61,7 +62,7 @@ import {sidebarReducer} from "./sidebar-reducer";
 //     newText: any
 // }
 
-export type ActionsTypes = ProfileActionsTypes | DialogsActionsTypes
+export type ActionsTypes = ProfileActionsTypes | DialogsActionsTypes | UsersActionsTypes
 // export type ActionsTypes = AddPostActionType | UpdateNewPostTextActionType
 
 // export const store: StoreType = {
