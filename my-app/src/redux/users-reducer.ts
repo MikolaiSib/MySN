@@ -3,22 +3,11 @@ import {ActionsTypes} from "./store";
 const FOLLOW = 'FOLLOW';
 const UNFOLLOW = "UNFOLLOW";
 const SET_USERS = "SET_USERS";
+const SET_PAGE = "SET_PAGE";
+const SET_TOTAL_USERS_COUNT = "SET_TOTAL_USERS_COUNT";
 
-export type UsersActionsTypes = ReturnType<typeof followAC> | ReturnType<typeof unfollowAC> | ReturnType<typeof setUsersAC>
-
-export type LocationType = {
-    city: string
-    country: string
-}
-
-// export type UsersType = {
-//     id: number | string
-//     photoUrl: string
-//     fullName: string
-//     status: string
-//     location: LocationType
-//     followed: boolean
-// }
+export type UsersActionsTypes = ReturnType<typeof followAC> | ReturnType<typeof unfollowAC>
+    | ReturnType<typeof setUsersAC> | ReturnType<typeof setPageAC> | ReturnType<typeof setTotalCountAC>
 
 export type UsersType = {
     name: string
@@ -34,16 +23,16 @@ export type UsersType = {
 
 export type UsersPageType = {
     users: UsersType[]
+    pageSize: number
+    totalUsersCount: number
+    currentPage: number
 }
 
 let initialState: UsersPageType = {
-    users: [
-        // {id: 1, photoUrl: "https://img.myloview.ru/posters/man-avatar-icon-700-245635972.jpg", fullName: "Dim", status: "Boss", location: { city: "Minsk", country: "RB" }, followed: false},
-        // {id: 2, photoUrl: "https://img.myloview.ru/posters/man-avatar-icon-700-245635972.jpg", fullName: "Dic", status: "Boss2", location: { city: "Msk", country: "RF" }, followed: true},
-        // {id: 3, photoUrl: "https://img.myloview.ru/posters/man-avatar-icon-700-245635972.jpg", fullName: "One", status: "Boss3", location: { city: "Sib", country: "RF" }, followed: true},
-        // {id: 4, photoUrl: "https://img.myloview.ru/posters/man-avatar-icon-700-245635972.jpg", fullName: "Two", status: "Boss4", location: { city: "Spb", country: "RF" }, followed: false},
-        // {id: 5, photoUrl: "https://img.myloview.ru/posters/man-avatar-icon-700-245635972.jpg", fullName: "Free", status: "Boss5", location: { city: "Vlad", country: "RF" }, followed: false}
-    ]
+    users: [],
+    pageSize: 5,
+    totalUsersCount: 0,
+    currentPage: 1,
 }
 
 export const usersReducer = (state: UsersPageType = initialState, action: ActionsTypes): UsersPageType => {
@@ -54,7 +43,11 @@ export const usersReducer = (state: UsersPageType = initialState, action: Action
         case UNFOLLOW:
             return {...state, users: state.users.map(u => u.id === action.userId ? {...u, followed: false} : u)}
         case SET_USERS:
-            return {...state, users: [...state.users, ...action.users]}
+            return {...state, users: [ ...action.users, ...state.users]}
+        case SET_PAGE:
+            return {...state, currentPage: action.currentPage}
+        case SET_TOTAL_USERS_COUNT:
+            return {...state, totalUsersCount: action.totalCount}
         default:
             return state
     }
@@ -81,3 +74,16 @@ export const setUsersAC = (users: any) => {
     } as const
 }
 
+export const setPageAC = (currentPage: number) => {
+    return {
+        type: SET_PAGE,
+        currentPage
+    } as const
+}
+
+export const setTotalCountAC = (totalCount: number) => {
+    return {
+        type: SET_TOTAL_USERS_COUNT,
+        totalCount
+    } as const
+}
