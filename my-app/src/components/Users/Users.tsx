@@ -1,53 +1,40 @@
 import React from 'react';
-import {UsersPropsType} from "./UsersContainer";
-import s from "./users.module.css"
-import axios from "axios";//import  * as axios from "axios"
-import avatar from "../../image/allAva.jpg"
-import App from "../../App";
+import s from "./users.module.css";
+import avatar from "../../image/allAva.jpg";
+import {UsersPageType, UsersType} from "../../redux/users-reducer";
 
-class Users extends React.Component<any, any> {
+type UsersTypeProps = {
+    totalUsersCount: number
+    pageSize: number
+    currentPage: number
+    onPageChanged: (numberPage: number) => void
+    users: UsersType[]
+    follow: (userId: any) => void
+    unfollow: (userId: any) => void
 
-    // constructor(props: any) {
-    //     super(props);
-    // }
+}
 
-    componentDidMount() {
-        axios.get(`https://social-network.samuraijs.com/api/1.0/users?page=${this.props.currentPage}&count=${this.props.pageSize}`)
-            .then(response => {
-                this.props.setUsers(response.data.items)
-                this.props.setTotalUsersCount(response.data.totalCount)
-            })
+let Users = (props: UsersTypeProps) => {
+
+    let pagesCount = Math.ceil(props.totalUsersCount / props.pageSize)
+
+    let pages = []
+    for (let i = 1; i <= pagesCount; i++) {
+        pages.push(i)
     }
 
-    onPageChanged = (mumberPage: number) => {
-        this.props.setPage(mumberPage);
-        axios.get(`https://social-network.samuraijs.com/api/1.0/users?page=${mumberPage}&count=${this.props.pageSize}`)
-            .then(response => {
-                this.props.setUsers(response.data.items)
-            })
-    }
-
-    render() {
-
-        let pagesCount = Math.ceil(this.props.totalUsersCount / this.props.pageSize)
-
-        let pages = []
-        for (let i = 1; i <= pagesCount; i++) {
-            pages.push(i)
-        }
-
-        return (
+    return (
+        <div>
             <div>
-                <div>
-                    {pages.map((p, i) => {
-                        return (
-                            <span key={i} onClick={() => {
-                                this.onPageChanged(p)
-                            }} className={this.props.currentPage === p ? s.selectedPage : ''}>{p} </span> //className={this.props.currentPage === p && s.selectedPage}
-                        )
-                    })}
-                </div>
-                {this.props.users.map((u: any) => <div key={u.id}>
+                {pages.map((p, i) => {
+                    return (
+                        <span key={i} onClick={() => {
+                            props.onPageChanged(p);
+                        }} className={props.currentPage === p ? s.selectedPage : ''}>{p} </span> //className={this.props.currentPage === p && s.selectedPage}
+                    )
+                })}
+            </div>
+            {props.users.map((u: any) => <div key={u.id}>
                 <span>
                     <div>
                         <img src={u.photos.small != null ? u.photos.small : avatar} alt="No ava"
@@ -56,14 +43,14 @@ class Users extends React.Component<any, any> {
                     <div>
                         {u.followed
                             ? <button onClick={() => {
-                                this.props.unfollow(u.id)
+                                props.unfollow(u.id)
                             }}>Unfollow</button>
                             : <button onClick={() => {
-                                this.props.follow(u.id)
+                                props.follow(u.id)
                             }}>Follow</button>}
                     </div>
                 </span>
-                    <span>
+                <span>
                     <span>
                         <div>
                             {u.name}
@@ -72,19 +59,10 @@ class Users extends React.Component<any, any> {
                             {u.status}
                         </div>
                     </span>
-                        {/*<span>*/}
-                        {/*    <div>*/}
-                        {/*        {u.location.country}*/}
-                        {/*    </div>*/}
-                        {/*    <div>*/}
-                        {/*        {u.location.city}*/}
-                        {/*    </div>*/}
-                        {/*</span>*/}
                 </span>
-                </div>)}
-            </div>
-        );
-    }
-}
+            </div>)}
+        </div>
+    );
+};
 
 export default Users;
