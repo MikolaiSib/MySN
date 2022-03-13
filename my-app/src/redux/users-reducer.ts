@@ -5,9 +5,10 @@ const UNFOLLOW = "UNFOLLOW";
 const SET_USERS = "SET_USERS";
 const SET_PAGE = "SET_PAGE";
 const SET_TOTAL_USERS_COUNT = "SET_TOTAL_USERS_COUNT";
+const SET_PRELOADER = "SET_PRELOADER";
 
-export type UsersActionsTypes = ReturnType<typeof followAC> | ReturnType<typeof unfollowAC>
-    | ReturnType<typeof setUsersAC> | ReturnType<typeof setPageAC> | ReturnType<typeof setTotalCountAC>
+export type UsersActionsTypes = ReturnType<typeof follow> | ReturnType<typeof unfollow>
+    | ReturnType<typeof setUsers> | ReturnType<typeof setPage> | ReturnType<typeof setTotalUsersCount> | ReturnType<typeof setFetching>
 
 export type UsersType = {
     name: string
@@ -26,6 +27,7 @@ export type UsersPageType = {
     pageSize: number
     totalUsersCount: number
     currentPage: number
+    isFetching: boolean
 }
 
 let initialState: UsersPageType = {
@@ -33,6 +35,7 @@ let initialState: UsersPageType = {
     pageSize: 5,
     totalUsersCount: 0,
     currentPage: 1,
+    isFetching: true
 }
 
 export const usersReducer = (state: UsersPageType = initialState, action: ActionsTypes): UsersPageType => {
@@ -48,42 +51,51 @@ export const usersReducer = (state: UsersPageType = initialState, action: Action
             return {...state, currentPage: action.currentPage}
         case SET_TOTAL_USERS_COUNT:
             return {...state, totalUsersCount: action.totalCount}
+        case SET_PRELOADER:
+            return {...state, isFetching: action.isFetching}
         default:
             return state
     }
 }
 
-export const followAC = (userId: any) => {
+export const follow = (userId: any) => {
     return {
         type: FOLLOW,
         userId
     } as const
 }
 
-export const unfollowAC = (userId: any) => {
+export const unfollow = (userId: any) => {
     return {
         type: UNFOLLOW,
         userId
     } as const
 }
 
-export const setUsersAC = (users: any) => {
+export const setUsers = (users: any) => {
     return {
         type: SET_USERS,
         users
     } as const
 }
 
-export const setPageAC = (currentPage: number) => {
+export const setPage = (currentPage: number) => {
     return {
         type: SET_PAGE,
         currentPage
     } as const
 }
 
-export const setTotalCountAC = (totalCount: number) => {
+export const setTotalUsersCount = (totalCount: number) => {
     return {
         type: SET_TOTAL_USERS_COUNT,
         totalCount
+    } as const
+}
+
+export const setFetching = (isFetching: boolean) => {
+    return {
+        type: SET_PRELOADER,
+        isFetching
     } as const
 }

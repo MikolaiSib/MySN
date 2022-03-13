@@ -7,11 +7,12 @@ import {MyPostsContainer} from "./MyPosts/MyPostsContainer";
 //     store: any
 // }
 
-export const Profile = () => {
+export const Profile = (props: any) => {
 
     return (
         <div>
-            <ProfileInfo/>
+
+            <ProfileInfo profile={props.profile}/>
             <MyPostsContainer/>
         </div>
     );
