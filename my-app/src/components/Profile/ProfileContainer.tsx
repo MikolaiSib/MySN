@@ -35,9 +35,10 @@ const ProfileContainerComponent = (props: any) => {
             if (!userId) {
                 userId = '18443';
             }
-            axios.get(`https://social-network.samuraijs.com/api/1.0/profile/${userId}`).then(response => {
-                props.setProfile(response.data)
-            })
+            axios.get(`https://social-network.samuraijs.com/api/1.0/profile/${userId}`)
+                .then(response => {
+                    props.setProfile(response.data)
+                })
         }, []
     )
 
