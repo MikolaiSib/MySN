@@ -1,19 +1,22 @@
 import React from 'react';
 import s from "./users.module.css";
 import avatar from "../../image/allAva.jpg";
-import {UsersPageType, UsersType} from "../../redux/users-reducer";
+import {setDisabledBtn, UsersPageType, UsersType} from "../../redux/users-reducer";
 import {NavLink} from "react-router-dom";
 import axios from "axios";
+import {usersAPI} from "../../api/api";
 
 type UsersTypeProps = {
     totalUsersCount: number
     pageSize: number
     currentPage: number
+    followingInProgress: any[]
     // isFetching: boolean
     onPageChanged: (numberPage: number) => void
     users: UsersType[]
     follow: (userId: any) => void
     unfollow: (userId: any) => void
+    setDisabledBtn: (isFetching: boolean, userId: any) => void
 }
 
 let Users = (props: UsersTypeProps) => {
@@ -24,6 +27,7 @@ let Users = (props: UsersTypeProps) => {
     for (let i = 1; i <= pagesCount; i++) {
         pages.push(i)
     }
+    console.log(props.followingInProgress)
 
     return (
         <div>
@@ -46,35 +50,13 @@ let Users = (props: UsersTypeProps) => {
                     </div>
                     <div>
                         {u.followed
-                            ? <button onClick={() => {
-
-                                axios.delete(`https://social-network.samuraijs.com/api/1.0/follow/${u.id}`, {
-                                    withCredentials: true,
-                                    headers: {
-                                        "API-KEY": "512df9e6-af0a-402c-bd78-3d8951a152e2"
-                                    }
-                                })
-                                    .then(response => {
-                                        if (response.data.resultCode === 0) {
-                                            props.unfollow(u.id)
-                                        }
-                                    })
-
+                            ? <button disabled={props.followingInProgress.some(id => id === u.id)} onClick={() => {
+                                props.setDisabledBtn(true, u.id)
+                                usersAPI.getUnfollow(u.id, props.unfollow, props.setDisabledBtn)
                             }}>Unfollow</button>
-                            : <button onClick={() => {
-
-                                axios.post(`https://social-network.samuraijs.com/api/1.0/follow/${u.id}`, {}, {
-                                    withCredentials: true,
-                                    headers: {
-                                        "api-key": "512df9e6-af0a-402c-bd78-3d8951a152e2"
-                                    }
-                                })
-                                    .then(response => {
-                                        if (response.data.resultCode === 0) {
-                                            props.follow(u.id)
-                                        }
-                                    })
-
+                            : <button disabled={props.followingInProgress.some(id => id === u.id)} onClick={() => {
+                                props.setDisabledBtn(true, u.id)
+                                usersAPI.getFollow(u.id, props.follow, props.setDisabledBtn)
                             }}>Follow</button>}
                     </div>
                 </span>

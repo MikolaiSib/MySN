@@ -2,7 +2,7 @@ import React from 'react';
 import {AppStateType} from "../../redux/redux-store";
 import {connect} from "react-redux";
 import {
-    follow, setFetching,
+    follow, setDisabledBtn, setFetching,
     setPage,
     setTotalUsersCount,
     setUsers,
@@ -10,9 +10,9 @@ import {
     UsersPageType,
     UsersType
 } from "../../redux/users-reducer";
-import axios from "axios";
 import Users from "./Users";
 import {Preloader} from "../common/Preloader/Preloader";
+import {usersAPI} from "../../api/api";
 
 
 class UsersContainerComponent extends React.Component<UsersPropsType, any> {
@@ -23,31 +23,22 @@ class UsersContainerComponent extends React.Component<UsersPropsType, any> {
 
     componentDidMount() {
         this.props.setFetching(true)
-        axios.get(`https://social-network.samuraijs.com/api/1.0/users?page=${this.props.currentPage}&count=${this.props.pageSize}`, {
-            withCredentials: true,
-            // headers: {
-            //     "API-KEY": "77b12768-0ca0-40b3-9a4d-6a21dc8e40c8"
-            // }
-        })
-            .then(response => {
+
+        usersAPI.getUsers(this.props.currentPage, this.props.pageSize)
+            .then(data => {
                 this.props.setFetching(false)
-                this.props.setUsers(response.data.items)
-                this.props.setTotalUsersCount(response.data.totalCount)
+                this.props.setUsers(data.items)
+                this.props.setTotalUsersCount(data.totalCount)
             })
     }
 
     onPageChanged = (pageNumber: number) => {
         this.props.setPage(pageNumber);
         this.props.setFetching(true)
-        axios.get(`https://social-network.samuraijs.com/api/1.0/users?page=${pageNumber}&count=${this.props.pageSize}`, {
-            withCredentials: true,
-            // headers: {
-            //     "API-KEY": "77b12768-0ca0-40b3-9a4d-6a21dc8e40c8"
-            // }
-        })
-            .then(response => {
+        usersAPI.getUsers(pageNumber, this.props.pageSize)
+            .then(data => {
                 this.props.setFetching(false)
-                this.props.setUsers(response.data.items)
+                this.props.setUsers(data.items)
             })
     }
 
@@ -65,6 +56,8 @@ class UsersContainerComponent extends React.Component<UsersPropsType, any> {
                 users={this.props.users}
                 follow={this.props.follow}
                 unfollow={this.props.unfollow}
+                setDisabledBtn={this.props.setDisabledBtn}
+                followingInProgress={this.props.followingInProgress}
             />
         </>
     }
@@ -77,6 +70,7 @@ type mapStatePropsType = {
     totalUsersCount: number
     currentPage: number
     isFetching: boolean
+    followingInProgress: any[]
 }
 
 type mapDispatchPropsType = {
@@ -86,6 +80,7 @@ type mapDispatchPropsType = {
     setPage: (currentPage: number) => void
     setTotalUsersCount: (totalCount: number) => void
     setFetching: (isFetching: boolean) => void
+    setDisabledBtn: (isFetching: boolean, userId: any) => void
 }
 
 export type UsersPropsType = mapStatePropsType & mapDispatchPropsType
@@ -97,6 +92,7 @@ const mapStateToProps = (state: AppStateType): mapStatePropsType => {
         totalUsersCount: state.usersPage.totalUsersCount,
         currentPage: state.usersPage.currentPage,
         isFetching: state.usersPage.isFetching,
+        followingInProgress: state.usersPage.followingInProgress,
     }
 }
 
@@ -129,6 +125,7 @@ export const UsersContainer = connect(mapStateToProps, {
     setUsers,
     setPage,
     setTotalUsersCount,
-    setFetching
+    setFetching,
+    setDisabledBtn,
 })(UsersContainerComponent)
 
