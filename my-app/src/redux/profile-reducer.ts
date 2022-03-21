@@ -1,4 +1,6 @@
 import {ActionsTypes} from "./store";
+import {usersAPI} from "../api/api";
+import {setUserData} from "./auth-reducer";
 
 const ADD_POST = 'ADD-POST';
 const UPDATE_NEW_POST_TEXT = "UPDATE-NEW-POST-TEXT";
@@ -97,4 +99,11 @@ export const setProfile = (profile: ProfileType) => {
         type: SET_PROFILE,
         profile
     } as const
+}
+
+export const getProfile = (userId: number) => (dispatch: any) => {
+    usersAPI.getProfile(userId)
+        .then(response => {
+            dispatch(setProfile(response.data))
+        })
 }

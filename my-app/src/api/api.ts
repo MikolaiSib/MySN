@@ -1,5 +1,5 @@
 import axios from "axios";
-import {setDisabledBtn} from "../redux/users-reducer";
+import {acceptUnfollow, setDisabledBtn} from "../redux/users-reducer";
 
 const instance = axios.create({
     withCredentials: true,
@@ -10,26 +10,25 @@ const instance = axios.create({
 })
 
 export const usersAPI = {
-    getUsers(currentPage: number = 1, pageSize: number = 10){
+    getUsers(currentPage: number = 1, pageSize: number = 10) {
         return instance.get(`users?page=${currentPage}&count=${pageSize}`)
             .then(response => response.data)
     },
-    getUnfollow(id: number, func: any, func2: any){
+    getUnfollow(id: number) {
         return instance.delete(`follow/${id}`)
-            .then(response => {
-                if (response.data.resultCode === 0) {
-                    func(id)
-                }
-                func2(false, id)
-            })},
-    getFollow(id: number, func: any, func2: any){
-        return instance.post(`follow/${id}`, {})
-            .then(response => {
-                if (response.data.resultCode === 0) {
-                    func(id)
-                }
-                func2(false, id)
-            })}
+    },
+    getFollow(id: number) {
+        return instance.post(`follow/${id}`)
+    },
+    getProfile(userId: any){
+        return instance.get(`profile/${userId}`)
+    },
+}
+
+export const authAPI = {
+    getMe(){
+        return instance.get(`auth/me`, )
+    },
 }
 
 

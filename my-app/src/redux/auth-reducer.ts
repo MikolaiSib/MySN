@@ -1,3 +1,6 @@
+import {acceptUnfollow, setDisabledBtn} from "./users-reducer";
+import {authAPI, usersAPI} from "../api/api";
+
 const SET_USER_DATA = 'SET_USER_DATA';
 const UNFOLLOW = "UNFOLLOW";
 
@@ -50,3 +53,12 @@ export const unfollow = (userId: any) => {
     } as const
 }
 
+export const getAuth = () => (dispatch: any) => {
+    authAPI.getMe()
+        .then(response => {
+            if (response.data.resultCode === 0) {
+                let {email, id, login} = response.data.data
+                dispatch(setUserData(email, id, login))
+            }
+        })
+}

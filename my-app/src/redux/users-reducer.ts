@@ -1,4 +1,5 @@
 import {ActionsTypes} from "./store";
+import {usersAPI} from "../api/api";
 
 const FOLLOW = 'FOLLOW';
 const UNFOLLOW = "UNFOLLOW";
@@ -8,9 +9,9 @@ const SET_TOTAL_USERS_COUNT = "SET_TOTAL_USERS_COUNT";
 const SET_PRELOADER = "SET_PRELOADER";
 const SET_DISABLED_BTN = "SET_DISABLED_BTN";
 
-export type UsersActionsTypes = ReturnType<typeof follow> | ReturnType<typeof unfollow>
+export type UsersActionsTypes = ReturnType<typeof acceptFollow> | ReturnType<typeof acceptUnfollow>
     | ReturnType<typeof setUsers> | ReturnType<typeof setPage> | ReturnType<typeof setTotalUsersCount>
-    | ReturnType<typeof setFetching>| ReturnType<typeof setDisabledBtn>
+    | ReturnType<typeof setFetching> | ReturnType<typeof setDisabledBtn>
 
 export type UsersType = {
     name: string
@@ -50,7 +51,7 @@ export const usersReducer = (state: UsersPageType = initialState, action: Action
         case UNFOLLOW:
             return {...state, users: state.users.map(u => u.id === action.userId ? {...u, followed: false} : u)}
         case SET_USERS:
-            return {...state, users: [ ...action.users]}
+            return {...state, users: [...action.users]}
         case SET_PAGE:
             return {...state, currentPage: action.currentPage}
         case SET_TOTAL_USERS_COUNT:
@@ -58,22 +59,24 @@ export const usersReducer = (state: UsersPageType = initialState, action: Action
         case SET_PRELOADER:
             return {...state, isFetching: action.isFetching}
         case SET_DISABLED_BTN:
-            return {...state, followingInProgress: action.isFetching
+            return {
+                ...state, followingInProgress: action.isFetching
                     ? [...state.followingInProgress, action.userId]
-                    : state.followingInProgress.filter(id => id !== action.userId)}
+                    : state.followingInProgress.filter(id => id !== action.userId)
+            }
         default:
             return state
     }
 }
 
-export const follow = (userId: any) => {
+export const acceptFollow = (userId: any) => {
     return {
         type: FOLLOW,
         userId
     } as const
 }
 
-export const unfollow = (userId: any) => {
+export const acceptUnfollow = (userId: any) => {
     return {
         type: UNFOLLOW,
         userId
@@ -115,3 +118,49 @@ export const setDisabledBtn = (isFetching: boolean, userId: any) => {
         userId,
     } as const
 }
+
+export const getUsers = (currentPage: number, pageSize: number) => {
+    return (dispatch: any) => {
+
+        dispatch(setPage(currentPage));
+        dispatch(setFetching(true))
+
+        usersAPI.getUsers(currentPage, pageSize)
+            .then(data => {
+                dispatch(setFetching(false))
+                dispatch(setUsers(data.items))
+                dispatch(setTotalUsersCount(data.totalCount))
+            })
+    }
+}
+
+export const follow = (userId: number) => (dispatch: any) => {
+
+    dispatch(setDisabledBtn(true, userId))
+
+    usersAPI.getFollow(userId)
+        .then(response => {
+            if (response.data.resultCode === 0) {
+                dispatch(acceptFollow(userId))
+            }
+            dispatch(setDisabledBtn(false, userId))
+        })
+}
+
+export const unfollow = (userId: number) => (dispatch: any) => {
+
+    dispatch(setDisabledBtn(true, userId))
+
+    usersAPI.getUnfollow(userId)
+        .then(response => {
+            if (response.data.resultCode === 0) {
+                dispatch(acceptUnfollow(userId))
+            }
+            dispatch(setDisabledBtn(false, userId))
+        })
+}
+
+
+  
+
+
