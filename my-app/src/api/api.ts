@@ -1,11 +1,10 @@
 import axios from "axios";
-import {acceptUnfollow, setDisabledBtn} from "../redux/users-reducer";
 
 const instance = axios.create({
     withCredentials: true,
     baseURL: 'https://social-network.samuraijs.com/api/1.0/',
     headers: {
-        "API-KEY": "512df9e6-af0a-402c-bd78-3d8951a152e2"
+        "API-KEY": "fa4fe252-44d3-4884-8ad2-2fd77330cbd5"
     }
 })
 

@@ -4,6 +4,8 @@ import {connect} from "react-redux";
 import {getProfile, ProfileType} from "../../redux/profile-reducer";
 import {AppStateType} from "../../redux/redux-store";
 import {useParams} from "react-router-dom";
+import {withAuthRedirect} from "../../hoc/withAuthRedirect";
+import {compose} from "redux";
 
 // type MyProfilePagePropsType = {
 //     store: any
@@ -31,10 +33,10 @@ const ProfileContainerComponent = (props: any) => {
 
 
     useEffect(() => {
-        if (!userId) {
-            userId = '18443';
-        }
-        props.getProfile(userId)
+            if (!userId) {
+                userId = '18443';
+            }
+            props.getProfile(userId)
         }, []
     )
 
@@ -43,6 +45,13 @@ const ProfileContainerComponent = (props: any) => {
         <Profile profile={props.profile}/>
     )
 }
+
+// let AuthRedirectComponent = (props: any) => {
+//     if (!props.isAuth){
+//         return <Navigate to="/login"/>
+//     }
+//     return <ProfileContainerComponent {...props} />
+// }
 
 
 export type mapStatePropsType = {
@@ -67,9 +76,14 @@ const mapStateToProps = (state: AppStateType): mapStatePropsType => {
 //     // ...
 // }
 
-export const ProfileContainer = connect(mapStateToProps, {
-    getProfile
-})(ProfileContainerComponent)
+export default compose<React.ComponentType>(
+    connect(mapStateToProps, {getProfile}),
+    withAuthRedirect
+)(ProfileContainerComponent)
+
+// export const ProfileContainer = withAuthRedirect(connect(mapStateToProps, {
+//     getProfile
+// })(ProfileContainerComponent))
 
 
 

@@ -47,9 +47,13 @@ export const usersReducer = (state: UsersPageType = initialState, action: Action
 
     switch (action.type) {
         case FOLLOW:
-            return {...state, users: state.users.map(u => u.id === action.userId ? {...u, followed: true} : u)}
+            return {...state
+                , users: state.users.map(u => u.id === action.userId ? {...u, followed: true} : u)
+            }
         case UNFOLLOW:
-            return {...state, users: state.users.map(u => u.id === action.userId ? {...u, followed: false} : u)}
+            return {...state
+                , users: state.users.map(u => u.id === action.userId ? {...u, followed: false} : u)
+            }
         case SET_USERS:
             return {...state, users: [...action.users]}
         case SET_PAGE:

@@ -3,7 +3,8 @@ import {addMessAC, DialogType, MessageType, updateNewMessTextAC} from "../../red
 import {Dialogs} from "./Dialogs";
 import {connect} from "react-redux";
 import {AppStateType} from "../../redux/redux-store";
-import {Dispatch} from "redux";
+import {compose, Dispatch} from "redux";
+import {withAuthRedirect} from "../../hoc/withAuthRedirect";
 
 
 // type DialogsPagePropsType = {
@@ -73,7 +74,7 @@ const mapStateToProps = (state: AppStateType): mapStatePropsType => {
     return {
         messages: state.dialogsPage.messages,
         newMessText: state.dialogsPage.newMessText,
-        dialogs: state.dialogsPage.dialogs
+        dialogs: state.dialogsPage.dialogs,
     }
 }
 
@@ -88,6 +89,19 @@ const mapDispatchToProps = (dispatch: Dispatch): mapDispatchPropsType => {
     }
 }
 
-export const DialogsContainer = connect(mapStateToProps, mapDispatchToProps)(Dialogs)
+// let AuthRedirectComponent = (props: any) => {
+//     if (!props.isAuth){
+//         return <Navigate to="/login"/>
+//     }
+//     return <Dialogs {...props} />
+// }
+
+export default compose<React.ComponentType>(
+    withAuthRedirect,
+    connect(mapStateToProps, mapDispatchToProps)
+)
+(Dialogs)
+
+// export const DialogsContainer = withAuthRedirect(connect(mapStateToProps, mapDispatchToProps)(Dialogs))
 
 

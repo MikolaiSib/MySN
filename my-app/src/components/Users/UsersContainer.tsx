@@ -9,6 +9,7 @@ import {
 } from "../../redux/users-reducer";
 import Users from "./Users";
 import {Preloader} from "../common/Preloader/Preloader";
+import {compose} from "redux";
 
 
 class UsersContainerComponent extends React.Component<UsersPropsType, any> {
@@ -107,10 +108,19 @@ const mapStateToProps = (state: AppStateType): mapStatePropsType => {
 //     }
 // }
 
-export const UsersContainer = connect(mapStateToProps, {
-    follow,
-    unfollow,
-    setPage,
-    getUsers,
-})(UsersContainerComponent)
+export default compose<React.ComponentType>(
+    connect(mapStateToProps, {
+        follow,
+        unfollow,
+        setPage,
+        getUsers,
+    })
+)(UsersContainerComponent)
+
+// export const UsersContainer = connect(mapStateToProps, {
+//     follow,
+//     unfollow,
+//     setPage,
+//     getUsers,
+// })(UsersContainerComponent)
 
