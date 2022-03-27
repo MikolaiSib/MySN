@@ -20,7 +20,7 @@ export const usersAPI = {
         return instance.post(`follow/${id}`)
     },
     getProfile(userId: any){
-        return instance.get(`profile/${userId}`)
+        return profileAPI.getProfile(userId)
     },
 }
 
@@ -30,5 +30,16 @@ export const authAPI = {
     },
 }
 
+export const profileAPI = {
+    getProfile(userId: any){
+        return instance.get(`profile/${userId}`)
+    },
+    getStatus(userId: any){
+        return instance.get(`profile/status/${userId}`)
+    },
+    updateStatus(status: string){
+        return instance.put(`profile/status`, {status: status})
+    }
+}
 
 

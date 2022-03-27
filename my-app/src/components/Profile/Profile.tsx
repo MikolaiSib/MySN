@@ -1,10 +1,7 @@
 import React from 'react';
-// import s from './Profile.module.css';
 import {ProfileInfo} from "./ProfileInfo/ProfileInfo";
 import {MyPostsContainer} from "./MyPosts/MyPostsContainer";
-import {mapStatePropsType} from "./ProfileContainer";
-import {ProfileType} from "../../redux/profile-reducer";
-import {Navigate} from "react-router-dom";
+
 
 // type MyProfilePagePropsType = {
 //     store: any
@@ -13,7 +10,7 @@ import {Navigate} from "react-router-dom";
 export const Profile = (props: any) => {
     return (
         <div>
-            <ProfileInfo profile={props.profile}/>
+            <ProfileInfo profile={props.profile} status={props.status} updateStatus={props.updateStatus}/>
             <MyPostsContainer/>
         </div>
     );
