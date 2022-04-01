@@ -1,5 +1,5 @@
 import React from 'react';
-import {addMessAC, DialogType, MessageType, updateNewMessTextAC} from "../../redux/dialogs-reducer";
+import {addMessAC, DialogType, MessageType} from "../../redux/dialogs-reducer";
 import {Dialogs} from "./Dialogs";
 import {connect} from "react-redux";
 import {AppStateType} from "../../redux/redux-store";
@@ -59,13 +59,11 @@ import {withAuthRedirect} from "../../hoc/withAuthRedirect";
 
 type mapStatePropsType = {
     messages: MessageType[]
-    newMessText: string
     dialogs: DialogType[]
 }
 
 type mapDispatchPropsType = {
-    addMess: () => void
-    onMessChange: (mess: any) => void
+    addMess: (newMessElement: string) => void
 }
 
 export type DialogsPropsType = mapStatePropsType & mapDispatchPropsType
@@ -73,18 +71,14 @@ export type DialogsPropsType = mapStatePropsType & mapDispatchPropsType
 const mapStateToProps = (state: AppStateType): mapStatePropsType => {
     return {
         messages: state.dialogsPage.messages,
-        newMessText: state.dialogsPage.newMessText,
         dialogs: state.dialogsPage.dialogs,
     }
 }
 
 const mapDispatchToProps = (dispatch: Dispatch): mapDispatchPropsType => {
     return {
-        addMess: () => {
-            dispatch(addMessAC())
-        },
-        onMessChange: (mess: any) => {
-            dispatch(updateNewMessTextAC(mess))
+        addMess: (newMessElement: string) => {
+            dispatch(addMessAC(newMessElement))
         }
     }
 }

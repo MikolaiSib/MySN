@@ -26,7 +26,6 @@ class ProfileStatus extends React.Component<any, any> {
 
     onStatusChange = (e: ChangeEvent<HTMLInputElement>) => {
         this.setState({status: e.currentTarget.value})
-        debugger
     }
 
     componentDidUpdate(prevProps: any, prevState: any, snapshot?: any) {

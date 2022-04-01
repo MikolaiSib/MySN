@@ -3,19 +3,27 @@ import s from './Dialogs.module.css';
 import {DialogItem} from "./DialogItem/DialogItem";
 import {Message} from "./Message/Message";
 import {DialogsPropsType} from "./DialogsContainer";
-import { Navigate } from 'react-router-dom';
+import {Field, InjectedFormProps, reduxForm} from "redux-form";
+
+type FormDataType = {
+    newMessElement: string
+}
 
 export const Dialogs = (props: DialogsPropsType) => {
 
-    let newMessElement = React.createRef<HTMLTextAreaElement>();
+    // let newMessElement = React.createRef<HTMLTextAreaElement>();
 
-    let addMess = () => {
-        props.addMess()
-    }
+    // let addMess = () => {
+    //     props.addMess()
+    // }
 
-    let onMessChange = () => {
-        let mess = newMessElement.current?.value
-        props.onMessChange(mess)
+    // let onMessChange = () => {
+    //     let mess = newMessElement.current?.value
+    //     props.onMessChange(mess)
+    // }
+
+    let addNewMess = (values: any) => {
+        props.addMess(values.newMessElement)
     }
 
     return (
@@ -30,21 +38,28 @@ export const Dialogs = (props: DialogsPropsType) => {
                 {props.messages.map(m =>
                     <Message key={m.id} mess={m.mess} id={m.id}/>)}
             </div>
-
-            <div>
-                <textarea
-                    onChange={onMessChange}
-                    ref={newMessElement}
-                    value={props.newMessText}
-                />
-            </div>
-            <div>
-                <button onClick={addMess}>
-                    add mess
-                </button>
-            </div>
+            <AddMessReduxForm onSubmit={addNewMess} />
         </div>
     );
 }
+
+const AddMessForm: React.FC<InjectedFormProps<FormDataType>> = (props) => {
+    return (
+        <form onSubmit={props.handleSubmit}>
+            <div>
+                <Field component='textarea' name='newMessElement' placeholder='enter mess'/>
+            </div>
+            <div>
+                <button>
+                    add mess
+                </button>
+            </div>
+        </form>
+    )
+}
+
+const AddMessReduxForm = reduxForm<FormDataType>({
+    form: 'dialogAddMess'
+})(AddMessForm)
 
 

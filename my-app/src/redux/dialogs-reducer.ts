@@ -1,9 +1,8 @@
 import {ActionsTypes} from "./store";
 
 const ADD_MESS = 'ADD-MESS';
-const UPDATE_NEW_MESS_TEXT = "UPDATE-NEW-MESS-TEXT";
 
-export type DialogsActionsTypes = ReturnType<typeof addMessAC> | ReturnType<typeof updateNewMessTextAC>
+export type DialogsActionsTypes = ReturnType<typeof addMessAC>
 
 export type DialogType = {
     id: number | string
@@ -18,11 +17,9 @@ export type MessageType = {
 export type DialogsPageType = {
     dialogs: DialogType[]
     messages: Array<MessageType>
-    newMessText: string
 }
 
 let initialState: DialogsPageType = {
-    newMessText: "",
     messages: [
         {id: 1, mess: "Hi"},
         {id: 2, mess: "Hello"},
@@ -45,30 +42,23 @@ export const dialogsReducer = (state: DialogsPageType = initialState, action: Ac
         case ADD_MESS:
             let newMess: MessageType = {
                 id: new Date().getTime(),
-                mess: state.newMessText
+                mess: action.newMessElement
             }
             return {
                 ...state,
                 messages: [...state.messages, newMess],
-                newMessText: ''
             }
-        case UPDATE_NEW_MESS_TEXT:
-            return {...state, newMessText: action.newMess}
         default:
             return state
     }
 }
 
-export const addMessAC = () => {
+export const addMessAC = (newMessElement: string) => {
     return {
-        type: ADD_MESS
+        type: ADD_MESS,
+        newMessElement
     } as const
 }
 
-export const updateNewMessTextAC = (newMess: string) => {
-    return {
-        type: UPDATE_NEW_MESS_TEXT,
-        newMess: newMess
-    } as const
-}
+
 
