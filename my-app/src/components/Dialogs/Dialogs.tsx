@@ -4,10 +4,14 @@ import {DialogItem} from "./DialogItem/DialogItem";
 import {Message} from "./Message/Message";
 import {DialogsPropsType} from "./DialogsContainer";
 import {Field, InjectedFormProps, reduxForm} from "redux-form";
+import {Textarea} from "../common/FormsControls/FormsControl";
+import {maxLengthCreator, required} from "../../utils/validators/validators";
 
 type FormDataType = {
     newMessElement: string
 }
+
+const maxLengthCreator30 = maxLengthCreator(30)
 
 export const Dialogs = (props: DialogsPropsType) => {
 
@@ -47,7 +51,7 @@ const AddMessForm: React.FC<InjectedFormProps<FormDataType>> = (props) => {
     return (
         <form onSubmit={props.handleSubmit}>
             <div>
-                <Field component='textarea' name='newMessElement' placeholder='enter mess'/>
+                <Field component={Textarea} name='newMessElement' placeholder='enter mess' validate={[required, maxLengthCreator30]}/>
             </div>
             <div>
                 <button>

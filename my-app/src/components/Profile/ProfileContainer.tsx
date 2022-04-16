@@ -34,7 +34,7 @@ const ProfileContainerComponent = (props: any) => {
 
     useEffect(() => {
             if (!userId) {
-                userId = '18443';
+                userId = props.myUserId//'18443';
             }
             props.getProfile(userId)
             props.getUserStatus(userId)
@@ -58,6 +58,8 @@ const ProfileContainerComponent = (props: any) => {
 export type mapStatePropsType = {
     profile: ProfileType | object
     status: string
+    myUserId: any
+    isAuth: any
 }
 
 type mapDispatchPropsType = {
@@ -70,6 +72,8 @@ const mapStateToProps = (state: AppStateType): mapStatePropsType => {
     return {
         profile: state.profilePage.profile,
         status: state.profilePage.status,
+        myUserId: state.auth.userId,
+        isAuth: state.auth.isAuth,
     }
 }
 
