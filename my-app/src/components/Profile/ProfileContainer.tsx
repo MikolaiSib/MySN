@@ -4,7 +4,6 @@ import {connect} from "react-redux";
 import {getProfile, getUserStatus, ProfileType, updateStatus} from "../../redux/profile-reducer";
 import {AppStateType} from "../../redux/redux-store";
 import {useParams} from "react-router-dom";
-import {withAuthRedirect} from "../../hoc/withAuthRedirect";
 import {compose} from "redux";
 
 // type MyProfilePagePropsType = {
@@ -35,6 +34,9 @@ const ProfileContainerComponent = (props: any) => {
     useEffect(() => {
             if (!userId) {
                 userId = props.myUserId//'18443';
+                // if (!userId) {
+                //     props.history.push('/login') //useHistory()
+                // }
             }
             props.getProfile(userId)
             props.getUserStatus(userId)

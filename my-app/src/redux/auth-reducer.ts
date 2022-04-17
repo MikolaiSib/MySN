@@ -2,9 +2,9 @@ import {authAPI} from "../api/api";
 import {stopSubmit} from "redux-form";
 
 const SET_USER_DATA = 'SET_USER_DATA';
-const UNFOLLOW = "UNFOLLOW";
+// const UNFOLLOW = "UNFOLLOW";
 
-export type AuthActionsTypes = ReturnType<typeof setUserData> | ReturnType<typeof unfollow>
+export type AuthActionsTypes = ReturnType<typeof setUserData> //| ReturnType<typeof unfollow>
 
 export type authType = {
     email: string | null
@@ -27,8 +27,8 @@ export const authReducer = (state: authType = initialState, action: AuthActionsT
                 ...state,
                 ...action.payload,
             }
-        case UNFOLLOW:
-            return {...state,}
+        // case UNFOLLOW:
+        //     return {...state,}
         default:
             return state
     }
@@ -46,15 +46,15 @@ export const setUserData = (email: string | null, userId: string | number | null
     } as const
 }
 
-export const unfollow = (userId: any) => {
-    return {
-        type: UNFOLLOW,
-        userId
-    } as const
-}
+// export const unfollow = (userId: any) => {
+//     return {
+//         type: UNFOLLOW,
+//         userId
+//     } as const
+// }
 
 export const getAuth = () => (dispatch: any) => {
-    authAPI.getMe()
+    return authAPI.getMe()
         .then(response => {
             if (response.data.resultCode === 0) {
                 let {email, id, login} = response.data.data
