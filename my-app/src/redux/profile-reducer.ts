@@ -1,13 +1,14 @@
 import {ActionsTypes} from "./store";
 import {profileAPI, usersAPI} from "../api/api";
-import {setUserData} from "./auth-reducer";
 
 const ADD_POST = 'ADD-POST';
+const DELETE_POST = 'DELETE-POST';
 const SET_PROFILE = "SET_PROFILE";
 const SET_STATUS = "SET_STATUS";
 
 export type ProfileActionsTypes = ReturnType<typeof addPost>
     | ReturnType<typeof setProfile> | ReturnType<typeof setStatus>
+    | ReturnType<typeof deletePost>
 
 export type PostType = {
     id: number
@@ -68,6 +69,12 @@ export const profileReducer = (state: ProfilePageType = initialState, action: Ac
                 posts: [...state.posts, newPost],
             }
         }
+        case DELETE_POST: {
+            return {
+                ...state,
+                posts: state.posts.filter(p => p.id !== action.id),
+            }
+        }
         case SET_PROFILE: {
             return {...state, profile: action.profile}
         }
@@ -85,7 +92,12 @@ export const addPost = (newPostElement: string) => {
         newPostElement
     } as const
 }
-
+export const deletePost = (id: number) => {
+    return {
+        type: DELETE_POST,
+        id
+    } as const
+}
 
 
 export const setProfile = (profile: ProfileType) => {

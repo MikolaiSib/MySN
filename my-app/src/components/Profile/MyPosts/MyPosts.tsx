@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {memo} from 'react';
 import s from './MyPosts.module.css';
 import Post from "./Post/Post";
 import {MyPostsPropsType} from "./MyPostsContainer";
@@ -12,8 +12,7 @@ type FormDataType = {
 
 const maxLengthCreator10 = maxLengthCreator(10)
 
-const MyPosts = (props: MyPostsPropsType) => {
-
+const MyPosts = memo((props: MyPostsPropsType) => {
 
     // let newPostElement = React.createRef<HTMLTextAreaElement>();
     //
@@ -57,7 +56,7 @@ const MyPosts = (props: MyPostsPropsType) => {
             </div>
         </div>
     );
-}
+})
 
 const AddPostForm: React.FC<InjectedFormProps<FormDataType>> = (props) => {
 
