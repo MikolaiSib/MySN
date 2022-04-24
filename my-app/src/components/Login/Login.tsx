@@ -1,7 +1,7 @@
 import React from 'react';
-import {Field, InjectedFormProps, reduxForm} from "redux-form";
-import {Input} from "../common/FormsControls/FormsControl";
-import {maxLengthCreator, required} from "../../utils/validators/validators";
+import {InjectedFormProps, reduxForm} from "redux-form";
+import {createField, Input} from "../common/FormsControls/FormsControl";
+import {required} from "../../utils/validators/validators";
 import {connect} from "react-redux";
 import {login} from "../../redux/auth-reducer";
 import {Navigate} from "react-router-dom";
@@ -13,25 +13,14 @@ type FormDataType = {
     rememberMe: boolean
 }
 
-const maxLengthCreator10 = maxLengthCreator(10)
-
-
-const LoginForm: React.FC<InjectedFormProps<FormDataType>> = (props) => {
+const LoginForm: React.FC<InjectedFormProps<FormDataType>> = ({handleSubmit, error}) => {
     return (
-        <form onSubmit={props.handleSubmit}>
-            <div>
-                <Field placeholder={'Email'} name={'email'} component={Input}
-                       validate={[required, maxLengthCreator10]}/>
-            </div>
-            <div>
-                <Field placeholder={'Password'} name={'password'} component={Input}
-                       validate={[required, maxLengthCreator10]} type={'password'}/>
-            </div>
-            <div>
-                <Field component={Input} name={'rememberMe'} type="checkbox" validate={[required]}/>
-            </div>
-            {props.error && <div className={s.formSummaryError}>
-                {props.error}
+        <form onSubmit={handleSubmit}>
+            {createField('Email', 'email', Input, [required])}
+            {createField('Password', 'password', Input, [required], 'password')}
+            {createField(null, 'rememberMe', Input, [], 'checkbox', 'rememberMe')}
+            {error && <div className={s.formSummaryError}>
+                {error}
             </div>}
             <div>
                 <button>Login</button>

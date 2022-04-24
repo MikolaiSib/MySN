@@ -1,8 +1,8 @@
 import {authAPI} from "../api/api";
 import {stopSubmit} from "redux-form";
+import {Dispatch} from "redux";
 
-const SET_USER_DATA = 'SET_USER_DATA';
-// const UNFOLLOW = "UNFOLLOW";
+const SET_USER_DATA = 'auth/SET_USER_DATA';
 
 export type AuthActionsTypes = ReturnType<typeof setUserData> //| ReturnType<typeof unfollow>
 
@@ -27,8 +27,6 @@ export const authReducer = (state: authType = initialState, action: AuthActionsT
                 ...state,
                 ...action.payload,
             }
-        // case UNFOLLOW:
-        //     return {...state,}
         default:
             return state
     }
@@ -46,41 +44,37 @@ export const setUserData = (email: string | null, userId: string | number | null
     } as const
 }
 
-// export const unfollow = (userId: any) => {
-//     return {
-//         type: UNFOLLOW,
-//         userId
-//     } as const
+// export const getAuth = () => (dispatch: Dispatch) => {
+//     return authAPI.getMe()
+//         .then(response => {
+//             if (response.data.resultCode === 0) {
+//                 let {email, id, login} = response.data.data
+//                 dispatch(setUserData(email, id, login, true))
+//             }
+//         })
 // }
 
-export const getAuth = () => (dispatch: any) => {
-    return authAPI.getMe()
-        .then(response => {
-            if (response.data.resultCode === 0) {
-                let {email, id, login} = response.data.data
-                dispatch(setUserData(email, id, login, true))
-            }
-        })
+export const getAuth = () => async (dispatch: Dispatch) => {
+    let response = await authAPI.getMe()
+    if (response.data.resultCode === 0) {
+        let {email, id, login} = response.data.data
+        dispatch(setUserData(email, id, login, true))
+    }
 }
 
-export const login = (email: string, password: string, rememberMe: boolean) => (dispatch: any) => {
-    authAPI.login(email, password, rememberMe)
-        .then(response => {
-            if (response.data.resultCode === 0) {
-                dispatch(getAuth())
-            } else {
-                let message = response.data.messages.length > 0 ? response.data.messages[0] : 'some error'
-                dispatch(stopSubmit('login', {_error: message}))
-            }
-        })
+export const login = (email: string, password: string, rememberMe: boolean) => async (dispatch: any) => {
+    let response = await authAPI.login(email, password, rememberMe)
+    if (response.data.resultCode === 0) {
+        dispatch(getAuth())
+    } else {
+        let message = response.data.messages.length > 0 ? response.data.messages[0] : 'some error'
+        dispatch(stopSubmit('login', {_error: message}))
+    }
 }
 
-export const logout = () => (dispatch: any) => {
-    authAPI.logout()
-        .then(response => {
-            if (response.data.resultCode === 0) {
-                dispatch(setUserData(null, null, null, false))
-                // dispatch(getAuth())
-            }
-        })
+export const logout = () => async (dispatch: Dispatch) => {
+    let response = await authAPI.logout()
+    if (response.data.resultCode === 0) {
+        dispatch(setUserData(null, null, null, false))
+    }
 }

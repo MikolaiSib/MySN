@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React from 'react';
 import s from './ProfileInfo.module.css';
 import {Preloader} from "../../common/Preloader/Preloader";
 import {ProfileStatusWithHooks} from "./ProfileStatusWithHooks";
@@ -8,7 +8,7 @@ export const ProfileInfo = (props: any) => {
         return <Preloader/>
     }
 
-    let foto = '1'
+    let foto = ''
     if(props.profile.fullName){
         foto = props.profile.photos.small
     }

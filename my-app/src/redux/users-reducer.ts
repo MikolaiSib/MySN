@@ -1,5 +1,7 @@
 import {ActionsTypes} from "./store";
 import {usersAPI} from "../api/api";
+import {Dispatch} from "redux";
+import {updateObjInArray} from "../utils/obj-helper";
 
 const FOLLOW = 'FOLLOW';
 const UNFOLLOW = "UNFOLLOW";
@@ -47,12 +49,14 @@ export const usersReducer = (state: UsersPageType = initialState, action: Action
 
     switch (action.type) {
         case FOLLOW:
-            return {...state
-                , users: state.users.map(u => u.id === action.userId ? {...u, followed: true} : u)
+            return {
+                ...state
+                ,users: updateObjInArray(state.users, action.userId, 'id', {followed: true})
             }
         case UNFOLLOW:
-            return {...state
-                , users: state.users.map(u => u.id === action.userId ? {...u, followed: false} : u)
+            return {
+                ...state
+                ,users: updateObjInArray(state.users, action.userId, 'id', {followed: false})
             }
         case SET_USERS:
             return {...state, users: [...action.users]}
@@ -123,48 +127,34 @@ export const setDisabledBtn = (isFetching: boolean, userId: any) => {
     } as const
 }
 
-export const getUsers = (currentPage: number, pageSize: number) => {
-    return (dispatch: any) => {
+export const getUsers = (currentPage: number, pageSize: number) => async (dispatch: Dispatch) => {
 
-        dispatch(setPage(currentPage));
-        dispatch(setFetching(true))
+    dispatch(setPage(currentPage));
+    dispatch(setFetching(true))
 
-        usersAPI.getUsers(currentPage, pageSize)
-            .then(data => {
-                dispatch(setFetching(false))
-                dispatch(setUsers(data.items))
-                dispatch(setTotalUsersCount(data.totalCount))
-            })
+    let data = await usersAPI.getUsers(currentPage, pageSize)
+    dispatch(setFetching(false))
+    dispatch(setUsers(data.items))
+    dispatch(setTotalUsersCount(data.totalCount))
+}
+
+const followUnfollow = async (dispatch: Dispatch, userId: number, apiMethod: any, actionCreator: any) => {
+
+    dispatch(setDisabledBtn(true, userId))
+
+    let response = await apiMethod(userId)
+    if (response.data.resultCode === 0) {
+        dispatch(actionCreator(userId))
     }
+    dispatch(setDisabledBtn(false, userId))
 }
 
-export const follow = (userId: number) => (dispatch: any) => {
-
-    dispatch(setDisabledBtn(true, userId))
-
-    usersAPI.getFollow(userId)
-        .then(response => {
-            if (response.data.resultCode === 0) {
-                dispatch(acceptFollow(userId))
-            }
-            dispatch(setDisabledBtn(false, userId))
-        })
+export const follow = (userId: number) => async (dispatch: Dispatch) => {
+    let apiMethod = usersAPI.getFollow.bind(usersAPI)
+    followUnfollow(dispatch, userId, apiMethod, acceptFollow)
 }
 
-export const unfollow = (userId: number) => (dispatch: any) => {
-
-    dispatch(setDisabledBtn(true, userId))
-
-    usersAPI.getUnfollow(userId)
-        .then(response => {
-            if (response.data.resultCode === 0) {
-                dispatch(acceptUnfollow(userId))
-            }
-            dispatch(setDisabledBtn(false, userId))
-        })
+export const unfollow = (userId: number) => async (dispatch: Dispatch) => {
+    let apiMethod = usersAPI.getUnfollow.bind(usersAPI)
+    followUnfollow(dispatch, userId, apiMethod, acceptUnfollow)
 }
-
-
-  
-
-

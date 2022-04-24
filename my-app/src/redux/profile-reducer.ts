@@ -1,5 +1,6 @@
 import {ActionsTypes} from "./store";
 import {profileAPI, usersAPI} from "../api/api";
+import {Dispatch} from "redux";
 
 const ADD_POST = 'ADD-POST';
 const DELETE_POST = 'DELETE-POST';
@@ -114,25 +115,20 @@ export const setStatus = (status: string) => {
     } as const
 }
 
-export const getProfile = (userId: number) => (dispatch: any) => {
-    usersAPI.getProfile(userId)
-        .then(response => {
-            dispatch(setProfile(response.data))
-        })
+export const getProfile = (userId: number) => async (dispatch: Dispatch) => {
+    let response = await usersAPI.getProfile(userId)
+    dispatch(setProfile(response.data))
 }
 
-export const getUserStatus = (userId: number) => (dispatch: any) => {
-    profileAPI.getStatus(userId)
-        .then(response => {
-            dispatch(setStatus(response.data))
-        })
+export const getUserStatus = (userId: number) => async (dispatch: Dispatch) => {
+    let response = await profileAPI.getStatus(userId)
+    dispatch(setStatus(response.data))
+
 }
 
-export const updateStatus = (status: string) => (dispatch: any) => {
-    profileAPI.updateStatus(status)
-        .then(response => {
-            if(!response.data.resultCode) {
-                dispatch(setStatus(status))
-            }
-        })
+export const updateStatus = (status: string) => async (dispatch: Dispatch) => {
+    let response = await profileAPI.updateStatus(status)
+    if (response.data.resultCode === 0) {
+        dispatch(setStatus(status))
+    }
 }

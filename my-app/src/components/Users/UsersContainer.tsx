@@ -2,7 +2,7 @@ import React from 'react';
 import {AppStateType} from "../../redux/redux-store";
 import {connect} from "react-redux";
 import {
-    getUsers, setDisabledBtn,
+    getUsers, //setDisabledBtn,
     setPage, UsersType,
     follow, unfollow
 } from "../../redux/users-reducer";
@@ -26,10 +26,12 @@ class UsersContainerComponent extends React.Component<UsersPropsType, any> {
     // }
 
     componentDidMount() {
+        // const {currentPage,pageSize } = this.props
         this.props.getUsers(this.props.currentPage, this.props.pageSize)
     }
 
     onPageChanged = (pageNumber: number) => {
+        // const pageSize = this.props
         this.props.getUsers(pageNumber, this.props.pageSize)
 
         // this.props.setPage(pageNumber);
