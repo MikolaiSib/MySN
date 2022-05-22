@@ -1,6 +1,7 @@
 import {ActionsTypes} from "./store";
 import {profileAPI, usersAPI} from "../api/api";
 import {Dispatch} from "redux";
+import {AppStateType, TypedDispatch} from "./redux-store";
 
 const ADD_POST = 'ADD-POST';
 const DELETE_POST = 'DELETE-POST';
@@ -21,14 +22,14 @@ export type PostType = {
 export type ProfileType = {
     aboutMe: string
     contacts: {
-        facebook: any
-        website: any
-        vk: any
-        twitter: any
-        instagram: any
-        youtube: any
-        github: any
-        mainLink: any
+        facebook: string
+        website: string
+        vk: string
+        twitter: string
+        instagram: string
+        youtube: string
+        github: string
+        mainLink: string
     }
     lookingForAJob: boolean
     lookingForAJobDescription: string
@@ -42,7 +43,7 @@ export type ProfileType = {
 
 export type ProfilePageType = {
     posts: Array<PostType>
-    profile: ProfileType | object
+    profile: ProfileType
     status: string
 }
 
@@ -53,7 +54,27 @@ let initialState: ProfilePageType = {
         {id: 2, post: "Hello one", likeCount: 7},
         {id: 3, post: "Good one", likeCount: 16},
     ],
-    profile: {},
+    profile: {
+        aboutMe: '',
+        contacts: {
+            facebook: '',
+            website: '',
+            vk: '',
+            twitter: '',
+            instagram: '',
+            youtube: '',
+            github: '',
+            mainLink: '',
+        },
+        lookingForAJob: false,
+        lookingForAJobDescription: '',
+        fullName: '',
+        userId: 0,
+        photos: {
+            small: '',
+            large: '',
+        },
+    },
     status: '',
 }
 
@@ -151,5 +172,16 @@ export const savePhoto = (file: any) => async (dispatch: Dispatch) => {
     let response = await profileAPI.savePhoto(file)
     if (response.data.resultCode === 0) {
         dispatch(setPhoto(response.data.data.photos))
+    }
+}
+
+export const updateProfile = (contacts: any) => async (dispatch: TypedDispatch, getState: () => AppStateType) => {
+    let editProfile =  {...getState().profilePage.profile, contacts: {...contacts}}
+    let userId =  getState().profilePage.profile.userId
+    let response = await profileAPI.updateProfile(editProfile)
+    if (response.data.resultCode === 0) {
+        dispatch(getProfile(userId))
+    } else {
+        console.log(response.data.messages[0])
     }
 }

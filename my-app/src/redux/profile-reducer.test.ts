@@ -9,7 +9,27 @@ beforeEach(() => {
             {id: 2, post: "Hello one", likeCount: 7},
             {id: 3, post: "Good one", likeCount: 16},
         ],
-        profile: {},
+        profile: {
+            aboutMe: '',
+            contacts: {
+                facebook: '',
+                website: '',
+                vk: '',
+                twitter: '',
+                instagram: '',
+                youtube: '',
+                github: '',
+                mainLink: '',
+            },
+            lookingForAJob: true,
+            lookingForAJobDescription: '',
+            fullName: '',
+            userId: 0,
+            photos: {
+                small: '',
+                large: '',
+            },
+        },
         status: '',
     }
 })
