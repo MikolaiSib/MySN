@@ -162,9 +162,13 @@ export const getUserStatus = (userId: number) => async (dispatch: Dispatch) => {
 }
 
 export const updateStatus = (status: string) => async (dispatch: Dispatch) => {
-    let response = await profileAPI.updateStatus(status)
-    if (response.data.resultCode === 0) {
-        dispatch(setStatus(status))
+    try {
+        let response = await profileAPI.updateStatus(status)
+        if (response.data.resultCode === 0) {
+            dispatch(setStatus(status))
+        }
+    } catch (e){
+
     }
 }
 
@@ -176,8 +180,8 @@ export const savePhoto = (file: any) => async (dispatch: Dispatch) => {
 }
 
 export const updateProfile = (contacts: any) => async (dispatch: TypedDispatch, getState: () => AppStateType) => {
-    let editProfile =  {...getState().profilePage.profile, contacts: {...contacts}}
-    let userId =  getState().profilePage.profile.userId
+    let editProfile = {...getState().profilePage.profile, contacts: {...contacts}}
+    let userId = getState().profilePage.profile.userId
     let response = await profileAPI.updateProfile(editProfile)
     if (response.data.resultCode === 0) {
         dispatch(getProfile(userId))
